@@ -13,16 +13,18 @@ void *sctrie_find_elem(void *root, const char *str, int str_len)
 	return result;
 }
 
-void *sctrie_append_elem(void *tree, const char *str, int str_len)
+void *sctrie_append_elem(void *tree, size_t node_size,
+		const char *str, int str_len)
 {
 	struct sctrie__tree_node_t *cur = (struct sctrie__tree_node_t*)tree;
 	for (int i = 0; i < str_len; i++) {
 		if (cur->nodes[(uint8_t)str[i]] != NULL) {
+			if (i + 1 == str_len)
+				return NULL;
 			cur = cur->nodes[(uint8_t)str[i]];
 			continue;
 		}
-		cur->nodes[(uint8_t)str[i]] =
-			(struct sctrie__tree_node_t*)calloc(1, sizeof(*cur));
+		cur->nodes[(uint8_t)str[i]] = calloc(1, node_size);
 		cur = cur->nodes[(uint8_t)str[i]];
 	}
 	return cur;
@@ -34,7 +36,7 @@ void sctrie_free_node(void *tree, void (*node_free)(void *node))
 	for (int i = 0; i < UCHAR_MAX; i++) {
 		if (cur->nodes[i] == NULL)
 			continue;
-		sctrie_free_node(cur, node_free);
+		sctrie_free_node(cur->nodes[i], node_free);
 	}
 	node_free(cur);
 }
@@ -45,7 +47,7 @@ void sctrie_free_tree_noself(void *tree, void (*node_free)(void *node))
 	for (int i = 0; i < UCHAR_MAX; i++) {
 		if (cur->nodes[i] == NULL)
 			continue;
-		sctrie_free_node(cur, node_free);
+		sctrie_free_node(cur->nodes[i], node_free);
 	}
 }
 

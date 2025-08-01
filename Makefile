@@ -1,6 +1,5 @@
 CC = gcc
 CFLAGS = -Wall -std=c99
-CDEBUG_FLAGS = -Wall -std=c99 -g
 AR = ar
 PREFIX = /usr/local
 
