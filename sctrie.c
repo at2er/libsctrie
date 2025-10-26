@@ -2,9 +2,9 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-void *sctrie_find_elem(void *root, const char *str, int str_len)
+void *sctrie_find_elem(void *tree, const char *str, int str_len)
 {
-	struct sctrie__tree_node_t *result = (struct sctrie__tree_node_t*)root;
+	struct sctrie__tree_node_t *result = (struct sctrie__tree_node_t*)tree;
 	for (int i = 0; i < str_len; i++) {
 		if (result->nodes[(uint8_t)str[i]] == NULL)
 			return NULL;
@@ -25,6 +25,18 @@ void *sctrie_append_elem(void *tree, size_t node_size,
 			continue;
 		}
 		cur->nodes[(uint8_t)str[i]] = calloc(1, node_size);
+		cur = cur->nodes[(uint8_t)str[i]];
+	}
+	return cur;
+}
+
+void *sctrie_append_or_find_elem(void *tree, size_t node_size,
+		const char *str, int str_len)
+{
+	struct sctrie__tree_node_t *cur = (struct sctrie__tree_node_t*)tree;
+	for (int i = 0; i < str_len; i++) {
+		if (cur->nodes[(uint8_t)str[i]] == NULL)
+			cur->nodes[(uint8_t)str[i]] = calloc(1, node_size);
 		cur = cur->nodes[(uint8_t)str[i]];
 	}
 	return cur;
