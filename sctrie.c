@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-void *sctrie_find_elem(void *tree, const char *str, int str_len)
+void *sctrie_find_elem(const void *tree, const char *str, int str_len)
 {
 	struct sctrie__tree_node_t *result = (struct sctrie__tree_node_t*)tree;
 	for (int i = 0; i < str_len; i++) {

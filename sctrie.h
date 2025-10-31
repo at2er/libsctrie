@@ -15,7 +15,7 @@ struct sctrie__tree_node_t {
 	void *data;
 };
 
-extern void *sctrie_find_elem(void *tree, const char *str, int str_len);
+extern void *sctrie_find_elem(const void *tree, const char *str, int str_len);
 extern void *sctrie_append_elem(void *tree, size_t node_size,
 		const char *str, int str_len);
 extern void *sctrie_append_or_find_elem(void *tree, size_t node_size,
